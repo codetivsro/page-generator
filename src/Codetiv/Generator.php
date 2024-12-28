@@ -151,49 +151,54 @@ class Generator
 
 		/** @var Page $route */
 		foreach ($routes as $route) {
-			$provider = $route->getProvider();
+			$this->generatePage($route);
+		}
+	}
 
-			if (is_string($route->getProvider())) {
-				$provider = $this->container->get($provider);
-			}
+	private function generatePage(Page $route): void
+	{
+		$provider = $route->getProvider();
 
-			if (!$provider instanceof DataProvider) {
-				throw new InvalidDataProviderException();
-			}
+		if (is_string($route->getProvider())) {
+			$provider = $this->container->get($provider);
+		}
 
-			foreach ($provider->provide() as $value) {
-				$uri = $this->parseUri($route->getPath(), $value);
+		if (!$provider instanceof DataProvider) {
+			throw new InvalidDataProviderException();
+		}
 
-				$fileName = $uri === '/' ? '/index.html' : $uri. '/index.html';
+		foreach ($provider->provide() as $value) {
+			$uri = $this->parseUri($route->getPath(), $value);
 
-				$file = $this->basePath . 'public' . $fileName;
+			$fileName = $uri === '/' ? '/index.html' : $uri. '/index.html';
 
-				try {
-					$regex = $this->convertPathToRegex($route->getPath());
+			$file = $this->basePath . 'public' . $fileName;
 
-					$matching = preg_match($regex, $uri, $params);
+			try {
+				$regex = $this->convertPathToRegex($route->getPath());
 
-					$routeParams = $this->resolveParams($params);
+				$matching = preg_match($regex, $uri, $params);
 
-					$callable = $this->getCallableFromRoute($route);
+				$routeParams = $this->resolveParams($params);
 
-					/** @var View $view */
-					$view =  $callable(...array_values($routeParams));
+				$callable = $this->getCallableFromRoute($route);
 
-					$body = $view->getBody();
+				/** @var View $view */
+				$view =  $callable(...array_values($routeParams));
 
-					$directory = pathinfo($file, PATHINFO_DIRNAME);
+				$body = $view->getBody();
 
-					if (!is_dir($directory)) {
-						mkdir($directory, recursive: true);
-					}
+				$directory = pathinfo($file, PATHINFO_DIRNAME);
 
-					file_put_contents($file, $body);
-
-					echo "\e[0;30;42m ✓ Generated \e[0m \e[1;32m$uri\e[0m" . PHP_EOL;
-				} catch (\Throwable $e) {
-					echo "\e[0;30;41m ✕ Error generating \e[0m $uri\e[0m \e[0;31m" . $e->getMessage() . "\e[0m" . PHP_EOL;
+				if (!is_dir($directory)) {
+					mkdir($directory, recursive: true);
 				}
+
+				file_put_contents($file, $body);
+
+				echo "\e[0;30;42m ✓ Generated \e[0m \e[1;32m$uri\e[0m" . PHP_EOL;
+			} catch (\Throwable $e) {
+				echo "\e[0;30;41m ✕ Error generating \e[0m $uri\e[0m \e[0;31m" . $e->getMessage() . "\e[0m" . PHP_EOL;
 			}
 		}
 	}
