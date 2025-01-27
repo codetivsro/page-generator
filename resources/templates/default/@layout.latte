@@ -12,7 +12,9 @@
     {/block}
 </head>
 <body>
+{include 'header.latte'}
 <main>{block content}{/block}</main>
+{include 'footer.latte'}
 {block scripts}
     <script src="/build/js/default.js"></script>
 {/block}
