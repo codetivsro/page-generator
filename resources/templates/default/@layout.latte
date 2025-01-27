@@ -8,15 +8,19 @@
     <meta name="description" content="Default site description">
     <meta name="keywords" content="default, site">
     {block head}
-        <link rel="stylesheet" href="/build/css/default.css">
+    <link rel="stylesheet" href="/build/css/default.css">
     {/block}
 </head>
 <body>
 {include 'header.latte'}
-<main>{block content}{/block}</main>
+
+<main>
+        {block content}{/block}
+</main>
 {include 'footer.latte'}
+
 {block scripts}
-    <script src="/build/js/default.js"></script>
+<script src="/build/js/default.js"></script>
 {/block}
 </body>
 </html>
