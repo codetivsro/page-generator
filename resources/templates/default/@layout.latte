@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{block title}Default site title{/block}</title>
+    <meta name="description" content="Default site description">
+    <meta name="keywords" content="default, site">
+    {block head}
+        <link rel="stylesheet" href="/build/css/default.css">
+    {/block}
+</head>
+<body>
+<main>{block content}{/block}</main>
+{block scripts}
+    <script src="/build/js/default.js"></script>
+{/block}
+</body>
+</html>

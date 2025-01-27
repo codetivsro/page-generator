@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pages;
+namespace App\Sites\Default;
 
 use Codetiv\Http\Page;
 use Codetiv\Http\Response\View;
@@ -11,6 +11,6 @@ class Home
 	#[Page('/')]
 	public function __invoke(): View
 	{
-		return new View('pages.home', ['text' => 'Hello World']);
+		return new View('default.home', ['text' => 'Hello World!']);
 	}
 }
